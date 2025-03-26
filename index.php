@@ -3,163 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Лабораторна робота</title>
+    <title>Підгурський Юрій ІПЗ-23</title>
     <style>
-        body { font-family: Verdana; margin: 20px; }
-        h2 { color: #007bff; }
-        h4 { color:rgba(80, 169, 107, 0.86); }
-        .task { border: 1px solid #ddd; padding: 15px; margin-bottom: 20px; background: #f9f9f9; }
-        .menu { margin-bottom: 20px; }
-        .menu a { margin-right: 15px; text-decoration: none; color: #007bff; font-weight: bold; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 <body>
+    <h1>Підгурський Юрій ІПЗ-23 11 Варіант</h1>
+    
+    <!-- Завдання 1 -->
+    <div class="container">
+        <h2>Завдання 1: Дано текстовий файл, підрахувати кількість символів в ньому</h2>
+        <h3>Завантажте текстовий файл</h3>
+        <form action="" method="post" enctype="multipart/form-data">
+            <input type="file" name="textfile" accept=".txt" required>
+            <button type="submit" name="upload">Обробити</button>
+        </form>
+        
+        <?php
+        if (isset($_POST['upload']) && isset($_FILES['textfile'])) {
+            $file = $_FILES['textfile']['tmp_name'];
+            
+            if ($file) {
+                $content = file_get_contents($file);
+                $charCount = mb_strlen($content, 'UTF-8');
+                echo "<p>Кількість символів у файлі: $charCount</p>";
+            } else {
+                echo "<p>Помилка завантаження файлу!</p>";
+            }
+        }
+        ?>
+    </div>
 
-<h2>Лабораторна робота 1  Підгурський Юрій ІПЗ-23 "(11 варіант)"</h2>
+    <!-- Завдання 2 -->
+    <div class="container">
+        <h2>Завдання 2: Вам потрібно розробити програму, яка б зчитувала кількість входжень якої-небудь обраної вами цифри у вибраному вами числі. Наприклад: цифра 5 в числі 442158755745 зустрічається 4 рази.</h2>
+        <?php
+        function countDigitOccurrences($number, $digit) {
+            $number = strval($number); 
+            $digit = strval($digit);   
+            return substr_count($number, $digit); 
+        }
 
-<!-- Меню -->
-<div class="menu">
-    <a href="#task1">Завдання 1</a>
-    <a href="#task2">Завдання 2</a>
-    <a href="#task3">Завдання 3</a>
-    <a href="#task4">Завдання 4</a>
-    <a href="#task5">Завдання 5</a>
-    <a href="#task6">Завдання 6</a>
-</div>
+        // Приклад використання
+        $number = 442158755745;
+        $digit = 5;
+        $count = countDigitOccurrences($number, $digit);
 
-<!-- Завдання 1 -->
-<div class="task" id="task3">
-    <h3>Завдання 1: обчислити значення виразу: ((m * log(m)) + (a * sin(a * m))) / (b * cos(b)) <br>при a=3; b=21; m=3,23</br></h3>
-    <?php
+        echo "<p>Цифра $digit в числі $number зустрічається $count раз(и).</p>";
+        ?>
+    </div>
 
-$a = 3;
-$b = 21;
-$m = 3.27;
+    <!-- Завдання 3 -->
+    <div class="container">
+        <h2>Завдання 3: Написати скрипт конвектора валют.</h2>
+        <form action="" method="post">
+            <label for="amount">Кількість:</label>
+            <input type="number" name="amount" step="0.01" required>
+            <label for="currency">Валюта:</label>
+            <select name="currency" required>
+                <option value="UAH">Гривня (UAH)</option>
+                <option value="EUR">Євро (EUR)</option>
+                <option value="PLN">Злотий (PLN)</option>
+            </select>
+            <button type="submit" name="convert">Конвертувати</button>
+        </form>
 
-$angle_sin_degrees = $a * $m; 
-$angle_cos_degrees = $b;      
+        <?php
+        if (isset($_POST['convert'])) {
+            $amount = floatval($_POST['amount']);
+            $currency = $_POST['currency'];
 
-$angle_sin_radians = deg2rad($angle_sin_degrees); 
-$angle_cos_radians = deg2rad($angle_cos_degrees); 
+            $rates = [
+                'UAH' => 1,
+                'EUR' => 40.5, 
+                'PLN' => 9.5  
+            ];
 
-$result_numerator = ($m * log($m)) + ($a * sin($angle_sin_radians));
-$result_denominator = $b * cos($angle_cos_radians);
+            if (isset($rates[$currency])) {
+                $uahAmount = $amount * $rates[$currency];
+                echo "<p>$amount $currency ≈ $uahAmount грн</p>";
+            } else {
+                echo "<p>Невідома валюта!</p>";
+            }
+        }
+        ?>
+    </div>
 
-$final_result = $result_numerator / $result_denominator;
+    <!-- Завдання 4 -->
+    <div class="container">
+        <h2>Завдання 4: Для файлу R1, компонентами якого є дійсні числа, скласти програму, що знаходить максимум і мінімум серед кожних десяти компонент файлу R1 і формує з них файл R2.</h2>
+        <h3>Завантажте файл .txt</h3>
+        <form action="" method="post" enctype="multipart/form-data">
+            <input type="file" name="textfile" accept=".txt" required>
+            <button type="submit" name="upload">Обробити</button>
+        </form>
 
-echo $final_result;
-?>
-</div>
+        <?php
+        if (isset($_POST['upload']) && isset($_FILES['textfile'])) {
+            $file = $_FILES['textfile']['tmp_name'];
 
-<!-- Завдання 2 -->
-<div class="task" id="task3">
-    <h3>Завдання 2: Задано натуральне число n. Скласти програму, яка змінює порядок цифр числа n на обернений.</h3>
-    <?php
+            if ($file) {
+                $numbers = array_map('floatval', file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
 
-$n = 12345; 
-// Зміна порядку цифр на обернений
-$reversed_n = strrev($n);
+                if (!empty($numbers)) {
+                    $outputFile = "R2.txt";
+                    $outputHandle = fopen($outputFile, "w");
 
-echo "Обернений порядок цифр числа $n: $reversed_n";
+                    for ($i = 0; $i < count($numbers); $i += 10) {
+                        $chunk = array_slice($numbers, $i, 10);
+                        $min = min($chunk);
+                        $max = max($chunk);
+                        fwrite($outputHandle, "$min $max\n");
+                    }
 
-?>
-
-</div>
-
-<!-- Завдання 3 -->
-<div class="task" id="task3">
-    <h3>Завдання 3: Знайти середнє арифметичне чисел  одновимірного масиву.</h3>
-    <?php
-
-$numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];  
-
-// Обчислюємо суму всіх елементів масиву
-$sum = array_sum($numbers);
-
-// Обчислюємо кількість елементів масиву
-$count = count($numbers);
-
-// Обчислюємо середнє арифметичне
-$average = $sum / $count;
-
-echo "Середнє арифметичне чисел масиву '1, 2, 3, 4, 5, 6, 7, 8, 9, 10': $average";
-
-?>
-
-</div>
-
-<!-- Завдання 4 -->
-<div class="task" id="task4">
-    <h3>Завдання 4: Обчислити середнє арифметичне елементів масиву L(2,20).</h3>
-    <?php
-
-$numbers = range(2, 20, 2);  // Генеруємо масив 
-
-// Обчислюємо суму елементів масиву
-$sum = array_sum($numbers);
-
-// Обчислюємо кількість елементів масиву
-$count = count($numbers);
-
-// Обчислюємо середнє арифметичне
-$average = $sum / $count;
-
-echo "Середнє арифметичне елементів масиву L(2, 20): $average";
-
-?>
-</div>
-
-<!-- Завдання 5 -->
-<div class="task" id="task5">
-    <h3>Завдання 5: Задано два масиви A(5) та B(5). Змінній s присвоїти значення –1, якщо максимальний елемент масиву A більше максимального елемента масиву B, 0 та 1 відповідно при рівності та меншості.
-
-</h3>
-<?php
-
-$A = [1, 2, 3, 1, 9];  
-$B = [6, 7, 8, 9, 1];  
-
-// Знаходимо максимальні елементи масивів A та B
-$maxA = max($A);
-$maxB = max($B);
-
-// Ініціалізуємо змінну s
-if ($maxA > $maxB) {
-    $s = -1;  // Якщо максимальний елемент A більше максимального елемента B
-} elseif ($maxA == $maxB) {
-    $s = 0;   // Якщо максимальні елементи A та B рівні
-} else {
-    $s = 1;   // Якщо максимальний елемент A менший за максимальний елемент B
-}
-
-echo "Значення змінної s: $s";
-
-?>
-
-</div>
-
-<!-- Завдання 6 -->
-<div class="task" id="task6">
-    <h3>Завдання 6: Дано текст з прописними латинськими літерами, за яким йде крапка. Надрукувати літери, що йдуть в тексті до літер “rtf”.</h3>
-    <?php
-
-$text = "HELLO WORLD RTF .";  
-
-// Знаходимо позицію літер "RTF" в тексті
-$pos = strpos($text, "RTF");
-
-// Якщо літери "RTF" знайдені в тексті
-if ($pos !== false) {
-    // Виводимо частину тексту до літер "RTF"
-    $result = substr($text, 0, $pos);
-
-    echo "Літери до 'RTF': " . $result;
-} else {
-    echo "Літери 'RTF' не знайдені в тексті.";
-}
-
-?>
-</div>
+                    fclose($outputHandle);
+                    echo "<p>Файл оброблено! <a href='$outputFile' download>Завантажити R2.txt</a></p>";
+                } else {
+                    echo "<p>Файл порожній або містить некоректні дані.</p>";
+                }
+            } else {
+                echo "<p>Помилка завантаження файлу!</p>";
+            }
+        }
+        ?>
+    </div>
 
 </body>
 </html>
